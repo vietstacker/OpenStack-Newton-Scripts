@@ -1075,6 +1075,22 @@ apt-get install openstack-dashboard
      ```sh
      TIME_ZONE = "Asia/Ho_Chi_Minh"
      ```
+     Chú ý kiểm tra timezone trên host cho đúng với cấu hình (thực hiện các lệnh sau trên command line):
+     ```sh
+     timedatectl
+     # Kết quả tương tự như sau
+           Local time: Tue 2016-10-25 11:07:21 ICT
+       Universal time: Tue 2016-10-25 04:07:21 UTC
+             RTC time: Tue 2016-10-25 04:07:21
+            Time zone: Asia/Ho_Chi_Minh (ICT, +0700)
+      Network time on: yes
+     NTP synchronized: yes
+      RTC in local TZ: no
+     ```
+     Nếu timezone không khớp với giá trị `Asia/Ho_Chi_Minh` thì thiết lập lại như sau:
+     ```sh
+     timedatectl set-timezone Asia/Ho_Chi_Minh
+     ```
 
 ### Kết thúc quá trình cài đặt
 - Khởi động lại web server apache:
