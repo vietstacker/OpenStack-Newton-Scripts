@@ -739,7 +739,7 @@ openstack compute service list
 
 ### Chuẩn bị cho cài đặt `Neutron`
 - Tạo database `neutron`:
- - Truy cập database clien:
+ - Truy cập database client:
  ```sh
  mysql -u root -pWelcome123
  ```
@@ -754,9 +754,9 @@ openstack compute service list
  EXIT;
  ```
 - Thiết lập biến môi trường:
- ```sh
- source admin-openrc
- ```
+```sh
+source admin-openrc
+```
 - Tạo service user `neutron` định danh cho dịch vụ networking:
  - Tạo user `neutron`:
  ```sh
@@ -919,7 +919,7 @@ neutron-metadata-agent
  - Chỉnh sửa file `/etc/neutron/l3_agent.ini`. Trong section `[DEFAULT]`, chỉnh sửa lại như sau:
  ```sh
  [DEFAULT]
- interface_driver = neutron.agent.linux.interface.OVSInterfaceDriver
+ interface_driver = openvswitch
  external_network_bridge =
  ```
 
@@ -932,7 +932,7 @@ neutron-metadata-agent
  - Chỉnh sửa file `/etc/neutron/dhcp_agent.ini`. Trong section `[DEFAULT]`, chỉnh sửa lại như sau:
  ```sh
  [DEFAULT]
- interface_driver = neutron.agent.linux.interface.OVSInterfaceDriver
+ interface_driver = openvswitch
  dhcp_driver = neutron.agent.linux.dhcp.Dnsmasq
  enable_isolated_metadata = True
  ```
