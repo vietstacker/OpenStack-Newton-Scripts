@@ -92,7 +92,7 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 ```
 
-- *Chú ý:* Không xóa hai dòng cấu hình với địa chỉ `127.0.0.1` 
+- *Chú ý:* Không xóa hai dòng cấu hình với địa chỉ `127.0.0.1`
 
 - Cập nhật các gói cho hệ thống
 ```sh
@@ -108,8 +108,9 @@ apt-get install chrony
 - Cấu hình chrony. Mở file `/etc/chrony/chrony.conf`. Tìm tới dòng `pool 2.debian.pool.ntp.org offline iburst`, comment lại dòng đó rồi chỉnh sửa lại như sau:
 ```sh
 #pool 2.debian.pool.ntp.org offline iburst
-server 1.vn.pool.ntp.org iburst
 server 0.asia.pool.ntp.org iburst
+server 1.asia.pool.ntp.org iburst
+server 2.asia.pool.ntp.org iburst
 server 3.asia.pool.ntp.org iburst
 ```
 
@@ -143,12 +144,12 @@ add-apt-repository cloud-archive:newton
 apt-get update && apt-get dist-upgrade -y
 ```
 
-- Cài đặt các gói openstack-client 
+- Cài đặt các gói openstack-client
 ```sh
 apt-get install python-openstackclient -y
 ```
 
-## 3.4. SQL database 
+## 3.4. SQL database
 ### Cài đặt và cấu hình MariaDB
 - Cài đặt MariaDB
 ```sh
@@ -166,8 +167,8 @@ max_connections = 4096
 collation-server = utf8_general_ci
 character-set-server = utf8
 ```
- 
- *Chú ý:* Giá trị `bind-address` thiết lập với địa chỉ dải `MANAGEMENT` của máy `CONTROLLER`, ở đây là `10.20.0.196`. 
+
+ *Chú ý:* Giá trị `bind-address` thiết lập với địa chỉ dải `MANAGEMENT` của máy `CONTROLLER`, ở đây là `10.20.0.196`.
 
 - Khởi động lại dịch vụ database:
 ```sh
@@ -245,12 +246,12 @@ apt-get install keystone
  - Tạo file backup cho file cấu hình gốc của `keystone` để khôi phục khi cần thiết:
  ```sh
  cp /etc/keystone/keystone.conf /etc/keystone/keystone.conf.orig
- cat /etc/keystone/keystone.conf.orig | egrep -v '^#|^$' > /etc/keystone/keystone.conf 
+ cat /etc/keystone/keystone.conf.orig | egrep -v '^#|^$' > /etc/keystone/keystone.conf
  ```
 
  - Mở file cấu hình keystone: `vi /etc/keystone/keystone.conf`
 
- - Tìm tới section `[database]` và chỉnh sửa như sau: 
+ - Tìm tới section `[database]` và chỉnh sửa như sau:
   ```sh
   [database]
   connection = mysql+pymysql://keystone:Welcome123@controller/keystone
@@ -280,7 +281,7 @@ keystone-manage bootstrap --bootstrap-password Welcome123 \
 --bootstrap-internal-url http://controller:35357/v3/ \
 --bootstrap-public-url http://controller:5000/v3/ \
 --bootstrap-region-id RegionOne
-``` 
+```
 
 - Cấu hình Apache HTTP server:
 ```sh
@@ -510,7 +511,7 @@ apt-get install glance
      [paste_deploy]
      flavor = keystone
      ```
-     Chú ý comment lại tất cả các dòng cấu hình khác của section `[keystone_authtoken]`. 
+     Chú ý comment lại tất cả các dòng cấu hình khác của section `[keystone_authtoken]`.
      - Tìm tới section `[glance_store]`, chỉnh sửa lại như sau:
      ```sh
      [glance_store]
@@ -588,7 +589,7 @@ openstack image list
  - Tạo 2 database `nova_api` và `nova`:
  ```sh
  CREATE DATABASE nova_api;
- CREATE DATABASE nova; 
+ CREATE DATABASE nova;
 
  GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'localhost' IDENTIFIED BY 'Welcome123';
  GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'%' IDENTIFIED BY 'Welcome123';
@@ -629,7 +630,7 @@ openstack endpoint create --region RegionOne compute admin http://controller:877
 ```sh
 apt-get install nova-api nova-conductor nova-consoleauth nova-novncproxy nova-scheduler
 ```
-- Cấu hình nova. 
+- Cấu hình nova.
  - Lưu lại cấu hình gốc của `nova`:
  ```sh
  cp /etc/nova/nova.conf /etc/nova/nova.conf.orig
@@ -975,9 +976,9 @@ su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
  iface br-ex inet static
  address 172.16.69.196/24
  gateway 172.16.69.1
- dns-nameservers 8.8.8.8 
+ dns-nameservers 8.8.8.8
 
- auto ens4 
+ auto ens4
  iface ens4 inet manual
     up ifconfig $IFACE 0.0.0.0 up
     up ip link set $IFACE promisc on
@@ -1124,7 +1125,7 @@ auto ens4
 iface ens4 inet static
 address 172.16.69.197/24
 gateway 172.16.69.1
-dns-nameservers 8.8.8.8 
+dns-nameservers 8.8.8.8
 
 # DATA NETWORK
 auto ens5
@@ -1179,7 +1180,7 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 ```
 
-- *Chú ý:* Không xóa hai dòng cấu hình với địa chỉ `127.0.0.1` 
+- *Chú ý:* Không xóa hai dòng cấu hình với địa chỉ `127.0.0.1`
 
 - Cập nhật các gói cho hệ thống
 ```sh
@@ -1226,7 +1227,7 @@ add-apt-repository cloud-archive:newton
 apt-get update && apt-get dist-upgrade -y
 ```
 
-- Cài đặt các gói openstack-client 
+- Cài đặt các gói openstack-client
 ```sh
 apt-get install python-openstackclient -y
 ```
@@ -1269,7 +1270,7 @@ apt-get install nova-compute
      username = nova
      password = Welcome123
      ```
-     Chú ý comment lại toàn bộ các dòng cấu hình khác trong sectiion `[keystone_authtoken]` nếu có. 
+     Chú ý comment lại toàn bộ các dòng cấu hình khác trong sectiion `[keystone_authtoken]` nếu có.
 
      - Sửa trong section `[vnc]` các tùy chọn như sau:
      ```sh
@@ -1383,7 +1384,7 @@ cat /etc/neutron/plugins/ml2/openvswitch_agent.ini.orig | egrep -v '^#|^$' > /et
  - Sửa các tùy chọn trong section `[ovs]` như sau:
  ```sh
  [ovs]
- local_ip = 10.10.20.197 
+ local_ip = 10.10.20.197
  bridge_mappings =
  ```
  Chú ý tùy chọn `local_ip` thiết lập với IP thuộc dải `DATA NETWORK`
@@ -1410,8 +1411,8 @@ source admin-openrc
 neutron net-create ext-net --router:external --provider:physical_network provider --provider:network_type flat
 neutron subnet-create ext-net 172.16.69.0/24 --name ext-subnet --allocation-pool start=172.16.69.140,end=172.16.69.149 --disable-dhcp --gateway 172.16.69.1
 neutron net-create demo-net
-neutron subnet-create demo-net 192.168.1.0/24 --name demo-subnet --gateway 192.168.1.1 --dns-nameserver 8.8.8.8 
-neutron router-create demo-router 
+neutron subnet-create demo-net 192.168.1.0/24 --name demo-subnet --gateway 192.168.1.1 --dns-nameserver 8.8.8.8
+neutron router-create demo-router
 neutron router-interface-add demo-router demo-subnet
 neutron router-gateway-set demo-router ext-net
 ```
@@ -1428,7 +1429,7 @@ Truy cập vào trình duyệt theo địa chỉ: `http://controller/horizon` ho
 <br><br>
 - Tạo instance, vào tab `Project -> COMPUTE -> Instances` tiến hành tạo instance mới theo các bước sau:
 <br><br>
-<img src="http://i.imgur.com/PkhUds1.png"> 
+<img src="http://i.imgur.com/PkhUds1.png">
 <br><br>
 <img src="http://i.imgur.com/viGYQJg.png">
 <br><br>
@@ -1455,8 +1456,3 @@ Cấp Floating IP cho instance
 Ping từ instance ra internet
 <br><br>
 <img src="http://i.imgur.com/U6CHcRr.png">
-
-
-
-
-
