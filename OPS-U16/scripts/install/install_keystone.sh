@@ -23,6 +23,8 @@ echocolor "Install keystone"
 apt-get -y install keystone
 
 # Back-up file keystone.conf
+path_keystone=/etc/keystone/keystone.conf
+log_keystone=/var/log/keystone
 test -f $path_keystone.orig || cp $path_keystone $path_keystone.orig
 
 # Config file /etc/keystone/keystone.conf
@@ -51,7 +53,7 @@ echocolor "Configure the Apache HTTP server"
 sleep 3
 echo "ServerName $CTL_MGNT_IP" >>  /etc/apache2/apache2.conf
 
-# systemctl restart apache2
+systemctl restart apache2
 rm -f /var/lib/keystone/keystone.db
 
 export OS_USERNAME=admin
@@ -107,3 +109,4 @@ cp  demo-openrc /root/demo-openrc
 
 echocolor "Verifying keystone"
 openstack token issue
+
