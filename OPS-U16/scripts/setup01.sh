@@ -72,6 +72,7 @@ function setup_ip_add {
 
     else
         echocolor "Cau hinh network that bai"
+        exit 1
     fi        
 }
 
@@ -83,15 +84,16 @@ function setup_hostname {
         echo "$HOST_CTL" > $path_hostname
         hostname -F $path_hostname
     
-    elif ["$1" == "compute1" ]; then
+    elif [ "$1" == "compute1" ]; then
         echo "$HOST_COM1" > $path_hostname
         hostname -F $path_hostname
 
-    elif ["$1" == "compute2" ]; then
+    elif [ "$1" == "compute2" ]; then
         echo "$HOST_COM2" > $path_hostname
         hostname -F $path_hostname
     else
         echocolor "Cau hinh hostname that bai"
+        exit 1
     fi
 }
 
@@ -105,15 +107,15 @@ function setup_hosts {
         echo "$COM2_MGNT_IP   $HOST_COM2" >> $path_hosts
         echo "$CIN_MGNT_IP    $HOST_CIN" >> $path_hosts
     
-    elif ["$1" == "compute1" ]; then
+    elif [ "$1" == "compute1" ]; then
         echo "127.0.0.1       localhost $HOST_COM1" > $path_hosts
         echo "$CTL_MGNT_IP    $HOST_CTL" >> $path_hosts
         echo "$COM1_MGNT_IP   $HOST_COM1" >> $path_hosts
         echo "$COM2_MGNT_IP   $HOST_COM2" >> $path_hosts
         echo "$CIN_MGNT_IP    $HOST_CIN" >> $path_hosts
 
-    elif ["$1" == "compute2" ]; then
-        echo "127.0.0.1       localhost $HOST_COM1" > $path_hosts
+    elif [ "$1" == "compute2" ]; then
+        echo "127.0.0.1       localhost $HOST_COM2" > $path_hosts
         echo "$CTL_MGNT_IP    $HOST_CTL" >> $path_hosts
         echo "$COM1_MGNT_IP   $HOST_COM1" >> $path_hosts
         echo "$COM2_MGNT_IP   $HOST_COM2" >> $path_hosts
@@ -121,6 +123,7 @@ function setup_hosts {
 
     else
         echocolor "setup hostname sai roi"
+        exit 1
 
     fi
     
@@ -138,6 +141,15 @@ function repo_openstack {
 
 ###############################################################################
 ## Thuc thi ham
+
+# Kie tra ham va cu phap thuc thi 
+if [ $# -ne 1 ]
+    then
+        echo "Correct Syntax"
+        echocolor "bash $0 [ allinone | controller | compute | networknode ]"
+        exit 1;
+fi
+
 setup_ip_add $1
 setup_hostname $1
 setup_hosts $1
