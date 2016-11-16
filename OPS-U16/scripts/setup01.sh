@@ -41,7 +41,7 @@ iface $MGNT_INTERFACE inet static
 # The primary network interface
 auto $EXT_INTERFACE
 iface $EXT_INTERFACE inet static
-    address $CTL_MGNT_EXT
+    address $CTL_EXT_IP
     netmask $NETMASK_ADD_EXT
     gateway $GATEWAY_IP_EXT
     dns-nameservers 8.8.8.8

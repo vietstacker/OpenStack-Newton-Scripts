@@ -31,7 +31,7 @@
 
 	cd scripts
 
-	chmod +x *.sh
+	chmod -R +x *.sh
 	```
 
 - Sửa biến trong file `config.cfg` theo ý muốn. Chỉ cần sửa các biến về địa chỉ IP, Gateway, DNS  sao cho phù hợp với thứ tự card mạng và dải IP thực tế..... Các biến password nên để nguyên.
