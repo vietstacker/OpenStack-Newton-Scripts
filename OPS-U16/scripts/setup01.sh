@@ -71,7 +71,7 @@ function setup_ip_add {
         netmask $NETMASK_ADD_EXT" $path_interfaces
 
     else
-        echocolor "exit"
+        echocolor "Cau hinh network that bai"
     fi        
 }
 
@@ -91,7 +91,7 @@ function setup_hostname {
         echo "$HOST_COM2" > $path_hostname
         hostname -F $path_hostname
     else
-        echocolor "Sai roi"
+        echocolor "Cau hinh hostname that bai"
     fi
 }
 
@@ -141,7 +141,7 @@ function repo_openstack {
 setup_ip_add $1
 setup_hostname $1
 setup_hosts $1
-# repo_openstack
+repo_openstack
 
 # echocolor "Reboot Server"
 # sleep 3
