@@ -1097,9 +1097,366 @@ apt-get install openstack-dashboard
 ```sh
 service apache2 reload
 ```
+- Mở trình duyệt, truy cập địa chỉ: `http://controller/horizon`. Đăng nhập với domain là `default`, tài khoản `admin` hoặc `demo`, password là `Welcome123`.
+
 # 4. Cài đặt trên COMPUTE NODE
 
+## 4.1. Thiết lập IP, hostname
+- Login với tài khoản thường và chuyển sang tài khoản root
+```sh
+su -
+```
+
+- Thiết lập địa chỉ IP theo đúng phân hoạch. Sửa file `/etc/network/interfaces` với nội dung như sau:
+```sh
+source /etc/network/interfaces.d/*
+
+auto lo
+iface lo inet loopback
+
+# MANAGEMENT NETWORK
+auto ens3
+iface ens3 inet static
+address 10.20.0.197/24
+
+# EXTERNAL NETWORK
+auto ens4
+iface ens4 inet static
+address 172.16.69.197/24
+gateway 172.16.69.1
+dns-nameservers 8.8.8.8 
+
+# DATA NETWORK
+auto ens5
+iface ens5 inet static
+address 10.10.20.197/24
+```
+
+- Khởi động lại toàn bộ các card mạng sau khi thiết lập IP
+```sh
+ifdown -a && ifup -a
+```
+
+- Kiểm tra lại kết nối tới gateway và internet:
+```sh
+ping 172.16.69.1 -c 4
+PING 172.16.69.1 (172.16.69.1) 56(84) bytes of data.
+64 bytes from 172.16.69.1: icmp_seq=1 ttl=64 time=0.348 ms
+64 bytes from 172.16.69.1: icmp_seq=2 ttl=64 time=0.320 ms
+64 bytes from 172.16.69.1: icmp_seq=3 ttl=64 time=0.375 ms
+64 bytes from 172.16.69.1: icmp_seq=4 ttl=64 time=0.263 ms
+
+--- 172.16.69.1 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 2997ms
+rtt min/avg/max/mdev = 0.263/0.326/0.375/0.045 ms
+```
+```sh
+ping google.com -c 4
+PING google.com (203.162.236.234) 56(84) bytes of data.
+64 bytes from static.vnpt.vn (203.162.236.234): icmp_seq=1 ttl=58 time=0.570 ms
+64 bytes from static.vnpt.vn (203.162.236.234): icmp_seq=2 ttl=58 time=0.585 ms
+64 bytes from static.vnpt.vn (203.162.236.234): icmp_seq=3 ttl=58 time=0.672 ms
+64 bytes from static.vnpt.vn (203.162.236.234): icmp_seq=4 ttl=58 time=0.617 ms
+
+--- google.com ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 2999ms
+rtt min/avg/max/mdev = 0.570/0.611/0.672/0.039 ms
+```
+
+- Cấu hình hostname. Sửa file `/etc/hostname`, thực hiện lệnh sau:
+```sh
+echo "compute1" > /etc/hostname
+```
+
+- Cập nhật lại file `/etc/hosts` để phân giải từ IP sang hostname và ngược lại với nội dung như sau:
+```sh
+127.0.0.1   localhost
+127.0.1.1   compute1
+10.20.0.196 controller
+10.20.0.197 compute1
+::1     localhost ip6-localhost ip6-loopback
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+```
+
+- *Chú ý:* Không xóa hai dòng cấu hình với địa chỉ `127.0.0.1` 
+
+- Cập nhật các gói cho hệ thống
+```sh
+apt-get update
+```
+
+## 4.2. Cài đặt NTP
+- Cài đặt gói chrony (tương đương với gói NTP)
+```
+apt-get install chrony
+```
+
+- Cấu hình chrony. Mở file `/etc/chrony/chrony.conf`. Tìm tới dòng `pool 2.debian.pool.ntp.org offline iburst`, comment lại dòng đó rồi chỉnh sửa lại như sau:
+```sh
+#pool 2.debian.pool.ntp.org offline iburst
+server controller iburst
+```
+
+- Khởi động lại dịch vụ NTP
+```sh
+service chrony restart
+```
+
+- Kiểm tra lại hoạt động của NTP: `chronyc sources`
+```sh
+chronyc sources
+210 Number of sources = 1
+MS Name/IP address         Stratum Poll Reach LastRx Last sample
+===============================================================================
+^? controller                    0  10     0   10y     +0ns[   +0ns] +/-    0ns
+```
+
+
+## 4.3. OpenStack packages
+- Khai báo repos cho OpenStack Newton
+
+```sh
+apt-get install software-properties-common
+add-apt-repository cloud-archive:newton
+```
+
+- Update sau khi khai báo repos cho `OpenStack Newton`
+```sh
+apt-get update && apt-get dist-upgrade -y
+```
+
+- Cài đặt các gói openstack-client 
+```sh
+apt-get install python-openstackclient -y
+```
+
+## 4.4. Cài đặt và cấu hình `Nova`
+### Cài đặt và cấu hình các gói
+- Cài đặt gói:
+```sh
+apt-get install nova-compute
+```
+
+- Cấu hình `nova`:
+ - Lưu lại cấu hình gốc:
+ ```sh
+ cp /etc/nova/nova.conf /etc/nova/nova.conf.orig
+ cat /etc/nova/nova.conf.orig | egrep -v '^#|^$' > /etc/nova/nova.conf
+ ```
+ - Chỉnh sửa lại file `/etc/nova/nova.conf` theo các bước sau:
+     - Sửa trong section `[DEFAULT]` các tùy chọn như sau:
+     ```sh
+     [DEFAULT]
+     enabled_apis = osapi_compute,metadata
+     transport_url = rabbit://openstack:Welcome123@controller
+     auth_strategy = keystone
+     my_ip = 10.20.0.197
+     use_neutron = True
+     firewall_driver = nova.virt.firewall.NoopFirewallDriver
+     ```    
+
+     - Sửa trong section `[keystone_authtoken]` các tùy chọn như sau:
+     ```sh
+     [keystone_authtoken]
+     auth_uri = http://controller:5000
+     auth_url = http://controller:35357
+     memcached_servers = controller:11211
+     auth_type = password
+     project_domain_name = default
+     user_domain_name = default
+     project_name = service
+     username = nova
+     password = Welcome123
+     ```
+     Chú ý comment lại toàn bộ các dòng cấu hình khác trong sectiion `[keystone_authtoken]` nếu có. 
+
+     - Sửa trong section `[vnc]` các tùy chọn như sau:
+     ```sh
+     [vnc]
+     enabled = True
+     vncserver_listen = 0.0.0.0
+     vncserver_proxyclient_address = $my_ip
+     novncproxy_base_url = http://controller:6080/vnc_auto.html
+     ```    
+
+     - Sửa hoặc thêm section `[glance]` với nội dung như sau:
+     ```sh
+     [glance]
+     api_servers = http://controller:9292
+     ```    
+
+     - Sửa hoặc thêm section `[oslo_concurrency]` với nội dung như sau:
+     ```sh
+     [oslo_concurrency]
+     lock_path = /var/lib/nova/tmp
+     ```
+
+     - Thêm section `[neutron]`:
+     ```sh
+     [neutron]
+     url = http://controller:9696
+     auth_url = http://controller:35357
+     auth_type = password
+     project_domain_name = default
+     user_domain_name = default
+     region_name = RegionOne
+     project_name = service
+     username = neutron
+     password = Welcome123
+     ```
+
+     - Xóa bỏ tùy chọn `log-dir` trong section `[DEFAULT]` để tránh gây lỗi.
+
+### Kết thúc tiến trình cài đặt
+- Xác định xem compute node cõ hỗ trợ ảo hóa kvm không sử dụng lệnh:
+```sh
+egrep -c '(vmx|svm)' /proc/cpuinfo
+```
+Nếu kết quả trả về một con số khác 0 thì có hỗ trợ và không phải làm bước tiếp theo. Nếu kết quả trả về bằng 0 thì thực hiện bước sau.
+- Chỉnh sửa lại section `[libvirt]` trong file `/etc/nova/nova-compute.conf` như sau:
+```sh
+[libvirt]
+virt_type = qemu
+```
+- Khởi động lại dịch vụ:
+```sh
+service nova-compute restart
+```
+
+## 4.5. Cài đặt và cấu hình `Neutron`
+
+### Cài đặt và cấu hình các gói
+- Cài đặt gói
+```sh
+apt-get install neutron-openvswitch-agent
+```
+- Cấu hình `neutron`
+ - Lưu lại cấu hình gốc:
+ ```sh
+ cp /etc/neutron/neutron.conf /etc/neutron/neutron.conf.orig
+ cat /etc/neutron/neutron.conf.orig | egrep -v '^#|^$' > /etc/neutron/neutron.conf
+ ```
+ - Chỉnh sửa lại file `/etc/neutron/neutron.conf` theo các bước sau:
+     - Comment lại hoặc xóa toàn bộ các dòng cấu hình trong section `[database]` nếu có.
+     - Sửa lại các tùy chọn trong section `[DEFAULT]` như sau:
+     ```sh
+     [DEFAULT]
+     rpc_backend = rabbit
+     auth_strategy = keystone
+     ```
+     - Sửa lại các tùy chọn trong section `[oslo_messaging_rabbit]` như sau:
+     ```sh
+     [oslo_messaging_rabbit]
+     rabbit_host = controller
+     rabbit_userid = openstack
+     rabbit_password = Welcome123
+     ```
+     - Sửa lại các tùy chọn trong section `[keystone_authtoken]` như sau:
+     ```sh
+     [keystone_authtoken]
+     auth_uri = http://controller:5000
+     auth_url = http://controller:35357
+     memcached_servers = controller:11211
+     auth_type = password
+     project_domain_name = default
+     user_domain_name = default
+     project_name = service
+     username = neutron
+     password = Welcome123
+     ```
+     Chú ý comment lại toàn bộ các dòng cấu hình khác trong section `[keystone_authtoken]` nếu có.
+
+### Cấu hình Open vSwitch agent
+- Lưu lại cấu hình gốc:
+```sh
+cp /etc/neutron/plugins/ml2/openvswitch_agent.ini /etc/neutron/plugins/ml2/openvswitch_agent.ini.orig
+cat /etc/neutron/plugins/ml2/openvswitch_agent.ini.orig | egrep -v '^#|^$' > /etc/neutron/plugins/ml2/openvswitch_agent.ini
+```
+- Chỉnh sửa file `/etc/neutron/plugins/ml2/openvswitch_agent.ini`:
+ - Sửa các tùy chọn trong section `[agent]` như sau:
+ ```sh
+ [agent]
+ tunnel_types = vxlan
+ l2_population = True
+ ```
+ - Sửa các tùy chọn trong section `[ovs]` như sau:
+ ```sh
+ [ovs]
+ local_ip = 10.10.20.197 
+ bridge_mappings =
+ ```
+ Chú ý tùy chọn `local_ip` thiết lập với IP thuộc dải `DATA NETWORK`
+
+ - Sửa các tùy chọn trong section `[securitygroup]` như sau:
+ ```sh
+ [securitygroup]
+ firewall_driver = iptables_hybrid
+ ```
+
+### Kết thúc tiến trình cài đặt
+- Khởi động lại các dịch vụ cần thiết
+```sh
+service nova-compute restart
+service neutron-openvswitch-agent restart
+```
+Tới đây có thể bắt đầu tạo máy ảo.
+
 # 5. Kiểm tra cài đặt
+## 5.1. Tạo provider network và tenant network:
+Thực hiện các lệnh sau trên máy controller
+```sh
+source admin-openrc
+neutron net-create ext-net --router:external --provider:physical_network provider --provider:network_type flat
+neutron subnet-create ext-net 172.16.69.0/24 --name ext-subnet --allocation-pool start=172.16.69.140,end=172.16.69.149 --disable-dhcp --gateway 172.16.69.1
+neutron net-create demo-net
+neutron subnet-create demo-net 192.168.1.0/24 --name demo-subnet --gateway 192.168.1.1 --dns-nameserver 8.8.8.8 
+neutron router-create demo-router 
+neutron router-interface-add demo-router demo-subnet
+neutron router-gateway-set demo-router ext-net
+```
+
+## 5.2. Tạo instance
+Truy cập vào trình duyệt theo địa chỉ: `http://controller/horizon` hoặc `http://<controller_ip>/horizon` và tiến hành tạo instance như sau:
+- Tạo flavor (mặc định hệ thống không tạo sẵn flavor), vào tab `Admin -> SYSTEM -> Flavors` tiến hành tạo flavor mới theo các bước sau:
+<br><br>
+<img src="http://i.imgur.com/XBdq70b.png">
+<br><br>
+<img src="http://i.imgur.com/Ock364W.png">
+<br><br>
+<img src="http://i.imgur.com/Ux7vFED.png">
+<br><br>
+- Tạo instance, vào tab `Project -> COMPUTE -> Instances` tiến hành tạo instance mới theo các bước sau:
+<br><br>
+<img src="http://i.imgur.com/PkhUds1.png"> 
+<br><br>
+<img src="http://i.imgur.com/viGYQJg.png">
+<br><br>
+<img src="http://i.imgur.com/uwrTsBh.png">
+<br><br>
+<img src="http://i.imgur.com/wJpE8om.png">
+<br><br>
+<img src="http://i.imgur.com/kfaQSQc.png">
+<br><br>
+<img src="http://i.imgur.com/UoFuY2a.png">
+<br><br>
+Cấp Floating IP cho instance
+<br><br>
+<img src="http://i.imgur.com/lwHGunT.png">
+<br><br>
+<img src="http://i.imgur.com/gStmSsQ.png">
+<br><br>
+<img src="http://i.imgur.com/sTowGPs.png">
+<br><br>
+<img src="http://i.imgur.com/39SSSjg.png">
+<br><br>
+<img src="http://i.imgur.com/4Iwp7Hj.png">
+<br><br>
+Ping từ instance ra internet
+<br><br>
+<img src="http://i.imgur.com/U6CHcRr.png">
+
+
 
 
 
