@@ -5,6 +5,8 @@
 # 2. Chuẩn bị
 ## 2.1. Mô hình
 
+[!Mô hình cài đặt](../images/topo-openstack-newton.png)
+
 ## 2.2. Yêu cầu
 - Về cấu hình từng máy chủ
 
