@@ -22,53 +22,97 @@ function setup_ip_add {
     test -f $path_interfaces.orig || cp $path_interfaces $path_interfaces.orig
 
     if [ "$1" == "controller" ]; then
-        sed -i "/iface $MGNT_INTERFACE inet dhcp/c \
-        iface $MGNT_INTERFACE inet static \n \
-        address $CTL_MGNT_IP \n \
-        netmask $NETMASK_ADD_MGNT" $path_interfaces
+        cat << EOF > /etc/network/interfaces
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
 
-        sed -i "/iface $EXT_INTERFACE inet dhcp/c \
-        iface $EXT_INTERFACE inet static \n \
-        address $CTL_EXT_IP \n \
-        netmask $NETMASK_ADD_EXT \n \
-        gateway $GATEWAY_IP_EXT \n \
-        dns-nameservers $DNS_IP" $path_interfaces
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+auto $MGNT_INTERFACE
+iface MGNT_INTERFACE inet static
+    address $CTL_MGNT_IP
+    netmask $NETMASK_ADD_MGNT
+
+
+# The primary network interface
+auto $EXT_INTERFACE
+iface $EXT_INTERFACE inet static
+    address $CTL_MGNT_IP
+    netmask $NETMASK_ADD_EXT
+    gateway $GATEWAY_IP_EXT
+    dns-nameservers 8.8.8.8
+
+EOF
 
     elif [ "$1" == "compute1" ]; then
-        sed -i "/iface $MGNT_INTERFACE inet dhcp/c \
-        iface $MGNT_INTERFACE inet static \n \
-        address $COM1_MGNT_IP \n \
-        netmask $NETMASK_ADD_MGNT" $path_interfaces
+        cat << EOF > /etc/network/interfaces
 
-        sed -i "/iface $EXT_INTERFACE inet dhcp/c \
-        iface $EXT_INTERFACE inet static \n \
-        address $COM1_EXT_IP \n \
-        netmask $NETMASK_ADD_EXT \n \
-        gateway $GATEWAY_IP_EXT \n \
-        dns-nameservers $DNS_IP" $path_interfaces
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
 
-        sed -i "/iface $DATA_INTERFACE inet dhcp/c \
-        iface $DATA_INTERFACE inet static \n \
-        address $COM1_DATA_IP \n \
-        netmask $NETMASK_ADD_EXT" $path_interfaces
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+auto $MGNT_INTERFACE
+iface MGNT_INTERFACE inet static
+    address $COM1_MGNT_IP
+    netmask $NETMASK_ADD_MGNT
+
+
+# The primary network interface
+auto $EXT_INTERFACE
+iface $EXT_INTERFACE inet static
+    address $COM1_EXT_IP
+    netmask $NETMASK_ADD_EXT
+    gateway $GATEWAY_IP_EXT
+    dns-nameservers 8.8.8.8
+
+auto $DATA_INTERFACE
+iface DATA_INTERFACE inet static
+    address $COM1_DATA_IP
+    netmask $NETMASK_ADD_DATA
+
+EOF
 
     elif [ "$1" == "compute2" ]; then
-        sed -i "/iface $MGNT_INTERFACE inet dhcp/c \
-        iface $MGNT_INTERFACE inet static \n \
-        address $COM2_MGNT_IP \n \
-        netmask $NETMASK_ADD_MGNT" $path_interfaces
+        cat << EOF > /etc/network/interfaces
 
-        sed -i "/iface $EXT_INTERFACE inet dhcp/c \
-        iface $EXT_INTERFACE inet static \n \
-        address $COM2_EXT_IP \n \
-        netmask $NETMASK_ADD_EXT \n \
-        gateway $GATEWAY_IP_EXT \n \
-        dns-nameservers $DNS_IP" $path_interfaces
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
 
-        sed -i "/iface $DATA_INTERFACE inet dhcp/c \
-        iface $DATA_INTERFACE inet static \n \
-        address $COM2_DATA_IP \n \
-        netmask $NETMASK_ADD_EXT" $path_interfaces
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+auto $MGNT_INTERFACE
+iface MGNT_INTERFACE inet static
+    address $COM2_MGNT_IP
+    netmask $NETMASK_ADD_MGNT
+
+
+# The primary network interface
+auto $EXT_INTERFACE
+iface $EXT_INTERFACE inet static
+    address $COM2_EXT_IP
+    netmask $NETMASK_ADD_EXT
+    gateway $GATEWAY_IP_EXT
+    dns-nameservers 8.8.8.8
+
+auto $DATA_INTERFACE
+iface DATA_INTERFACE inet static
+    address $COM2_DATA_IP
+    netmask $NETMASK_ADD_DATA
+
+EOF
 
     else
         echocolor "Cau hinh network that bai"

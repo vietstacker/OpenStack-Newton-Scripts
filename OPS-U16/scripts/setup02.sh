@@ -49,7 +49,7 @@ function install_ntp {
 		server $HOST_CTL iburst/g' $path_chrony
 
 	else
-		echo "Sai may chu NTP roi"
+		echo "Error installing NTP"
 		exit 1
 	fi
 
@@ -63,7 +63,7 @@ function install_ntp {
 ###############################################################################
 function install_database ()
 {
-	echocolor "Install MYSQL"
+	echocolor "Install and Config MariaDB"
 	sleep 3
 
 	echo mariadb-server-10.0 mysql-server/root_password $MYSQL_PASS | \
@@ -117,7 +117,7 @@ function install_rabbitmq {
 
 ###############################################################################
 function install_memcache {
-	echocolor "Install memcache"
+	echocolor "Install and Config Memcache"
 	sleep 3
 	apt-get -y install memcached python-memcache
 	sed -i "s/-l 127.0.0.1/-l $CTL_MGNT_IP/g" /etc/memcached.conf
@@ -137,9 +137,16 @@ if [ $# -ne 1 ]
         exit 1;
 fi
 
-install_crudini
-install_python_client
-install_ntp $1
-install_database
-install_rabbitmq
-install_memcache
+if [ "$1" == "controller" ]; then 
+	install_crudini
+	install_python_client
+	install_ntp $1
+	install_database
+	install_rabbitmq
+	install_memcache
+
+else 
+	install_crudini
+	install_python_client
+	install_ntp $1
+fi
