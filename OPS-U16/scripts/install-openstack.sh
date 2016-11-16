@@ -35,11 +35,11 @@ function install_ntp {
 		server 0.asia.pool.ntp.org iburst \
 		server 3.asia.pool.ntp.org iburst/g' $path_chrony
 
-	elif [[ "$1" == "compute1" ]]; then
+	elif [ "$1" == "compute1" ]; then
 		sed -i 's/pool 2.debian.pool.ntp.org offline iburst/ \
 		server $HOST_CTL iburst/g' $path_chrony
 
-	elif [[ "$1" == "compute2" ]]; then
+	elif [ "$1" == "compute2" ]; then
 		sed -i 's/pool 2.debian.pool.ntp.org offline iburst/ \
 		server $HOST_CTL iburst/g' $path_chrony
 
@@ -133,8 +133,7 @@ function install_memcache {
 ### Thuc thi ham
 
 ### Kie tra ham va cu phap thuc thi 
-if [ $# -ne 1 ]
-    then
+if [ $# -ne 1 ]; then
         echocolor  "Thu thi voi cac tuy chon sau"
         echo "Thuc hien tren Controller bash $0 controller"
         echo "Thuc hien tren Compute1 bash $0 compute1"
