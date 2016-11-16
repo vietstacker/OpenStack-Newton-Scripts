@@ -1,7 +1,8 @@
-#!/bin/bash -ex
-#
+#!/bin/bash
+## Install Keystone
 
-path_keystone=/etc/keystone/keystone.conf
+###############################################################################
+## Khai bao cac chuong trinh ho tro
 
 echocolor "Create Database for Keystone"
 

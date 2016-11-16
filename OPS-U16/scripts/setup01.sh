@@ -33,7 +33,7 @@ auto lo
 iface lo inet loopback
 
 auto $MGNT_INTERFACE
-iface MGNT_INTERFACE inet static
+iface $MGNT_INTERFACE inet static
     address $CTL_MGNT_IP
     netmask $NETMASK_ADD_MGNT
 
@@ -41,7 +41,7 @@ iface MGNT_INTERFACE inet static
 # The primary network interface
 auto $EXT_INTERFACE
 iface $EXT_INTERFACE inet static
-    address $CTL_MGNT_IP
+    address $CTL_MGNT_EXT
     netmask $NETMASK_ADD_EXT
     gateway $GATEWAY_IP_EXT
     dns-nameservers 8.8.8.8
@@ -61,7 +61,7 @@ auto lo
 iface lo inet loopback
 
 auto $MGNT_INTERFACE
-iface MGNT_INTERFACE inet static
+iface $MGNT_INTERFACE inet static
     address $COM1_MGNT_IP
     netmask $NETMASK_ADD_MGNT
 
@@ -75,7 +75,7 @@ iface $EXT_INTERFACE inet static
     dns-nameservers 8.8.8.8
 
 auto $DATA_INTERFACE
-iface DATA_INTERFACE inet static
+iface $DATA_INTERFACE inet static
     address $COM1_DATA_IP
     netmask $NETMASK_ADD_DATA
 
@@ -94,7 +94,7 @@ auto lo
 iface lo inet loopback
 
 auto $MGNT_INTERFACE
-iface MGNT_INTERFACE inet static
+iface $MGNT_INTERFACE inet static
     address $COM2_MGNT_IP
     netmask $NETMASK_ADD_MGNT
 
@@ -108,7 +108,7 @@ iface $EXT_INTERFACE inet static
     dns-nameservers 8.8.8.8
 
 auto $DATA_INTERFACE
-iface DATA_INTERFACE inet static
+iface $DATA_INTERFACE inet static
     address $COM2_DATA_IP
     netmask $NETMASK_ADD_DATA
 
