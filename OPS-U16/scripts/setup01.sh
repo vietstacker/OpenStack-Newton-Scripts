@@ -142,20 +142,23 @@ function repo_openstack {
 ###############################################################################
 ## Thuc thi ham
 
-# Kie tra ham va cu phap thuc thi 
+### Kie tra ham va cu phap thuc thi 
 if [ $# -ne 1 ]
     then
-        echo "Correct Syntax"
-        echocolor "bash $0 [ allinone | controller | compute | networknode ]"
+        echocolor  "Thu thi voi cac tuy chon sau"
+        echo "Thuc hien tren Controller bash $0 controller"
+        echo "Thuc hien tren Compute1 bash $0 compute1"
+        echo "Thuc hien tren Compute1 bash $0 compute2"
         exit 1;
 fi
 
+### Goi ham thuc hiẹn
 setup_ip_add $1
 setup_hostname $1
 setup_hosts $1
 repo_openstack
 
-# echocolor "Reboot Server"
-# sleep 3
-# init 6
+echocolor "Reboot Server"
+sleep 3
+init 6
 
