@@ -2,7 +2,8 @@
 #
 source config.cfg
 source functions.sh
-source path.cfg
+
+path_keystone=/etc/keystone/keystone.conf
 
 echocolor "Create Database for Keystone"
 

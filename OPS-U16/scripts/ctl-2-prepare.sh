@@ -1,8 +1,8 @@
 #!/bin/bash -ex
 #
 source config.cfg
-source path.cfg
 source functions.sh
+path_chrony=/etc/chrony/chrony.conf
 
 echocolor "Installing CRUDINI"
 sleep 3
