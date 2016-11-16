@@ -21,7 +21,7 @@ function setup_ip_add {
     sleep 3
     test -f $path_interfaces.orig || cp $path_interfaces $path_interfaces.orig
 
-    if [ "$1" == "controller"]; then
+    if [ "$1" == "controller" ]; then
         sed -i "/iface $MGNT_INTERFACE inet dhcp/c \
         iface $MGNT_INTERFACE inet static \n \
         address $CTL_MGNT_IP \n \
@@ -72,8 +72,7 @@ function setup_ip_add {
 
     else
         echocolor "exit"
-    fi
-        
+    fi        
 }
 
 function setup_hostname {
@@ -94,7 +93,6 @@ function setup_hostname {
     else
         echocolor "Sai roi"
     fi
-
 }
 
 function setup_hosts {
