@@ -1,14 +1,18 @@
 #!/bin/bash
 source config.cfg
-source path.cfg
 source functions.sh
+
+## Khai bao duong dan
+path_hostname=/etc/hostname
+path_interfaces=/etc/network/interfaces
+path_hosts=/etc/hosts
 
 ## Dinh nghia ham
 
-function setup_ip_add {
+function ctl_setup_ip_add {
     echocolor "Setup interfaces"
     sleep 3
-    path_interfaces=/etc/network/interfaces
+    
     test -f $path_interfaces.orig || cp $path_interfaces $path_interfaces.orig
     sed -i "/iface $MGNT_INTERFACE inet dhcp/c \
     iface $MGNT_INTERFACE inet static \n \
@@ -25,15 +29,14 @@ function setup_ip_add {
 
 function setup_hostname {
     echocolor "Setup /etc/hostname"
-    sleep 3
-    path_hostname=/etc/hostname
+    sleep 3    
     echo "$HOST_CTL" > $path_hostname
     hostname -F $path_hostname
 }
 
 function setup_hosts {
     echocolor "Setup /etc/hosts"
-    path_hosts=/etc/hosts
+    if [ "$1"" == "controller" ]
     test -f $path_hosts.orig || cp $path_hosts $path_hosts.orig
     echo "127.0.0.1       localhost $HOST_CTL" > $path_hosts
     echo "$CTL_MGNT_IP    $HOST_CTL" >> $path_hosts

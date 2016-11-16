@@ -1,11 +1,22 @@
-﻿## OpenStack Newton note
+﻿# OpenStack Newton note
 
-# Mô hình
+## Mô hình
 
 ![Mô hình cài đặt](../images/topo-openstack-newton.png)
 
 
-# Các bước cài đặt
+## Môi trường cài đặt
+
+- Hệ điều hành: Ubuntu Server 16.04 64 bit
+- CPU hỗ trợ công nghệ VT
+
+## Các chú ý khi cài đặt
+
+- Thực thi với quyền `root`
+
+
+
+## Các bước cài đặt
 ## Controller node
 - Thực hiện các lệnh sau để tải script
 
