@@ -12,6 +12,7 @@
 	```sh
 	apt-get -y update && apt-get -y install git 
 
+	git clone https://github.com/congto/OpenStack-Newton-Scripts.git
 
 	mv /root/OpenStack-Newton-Scripts/OPS-U16/scripts/ /root/
 
