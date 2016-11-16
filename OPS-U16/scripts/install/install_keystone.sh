@@ -3,6 +3,9 @@
 
 ###############################################################################
 ## Khai bao cac chuong trinh ho tro
+dir_path=$(dirname $0)
+source $dir_path/config.cfg
+source $dir_path/functions.sh
 
 echocolor "Create Database for Keystone"
 
