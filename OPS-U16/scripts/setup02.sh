@@ -35,21 +35,21 @@ function install_ntp {
 	test -f $path_chrony.orig || cp $path_chrony $path_chrony.orig
 
 	if [ "$1" == "controller" ]; then
-		sed -i 's/pool 2.debian.pool.ntp.org offline iburst/\
+		sed -i 's/pool 2.debian.pool.ntp.org offline iburst/ \
 server 1.vn.pool.ntp.org iburst \
 server 0.asia.pool.ntp.org iburst \
 server 3.asia.pool.ntp.org iburst/g' $path_chrony
 
 	elif [ "$1" == "compute1" ]; then
-		sed -i 's/pool 2.debian.pool.ntp.org offline iburst/\
+		sed -i 's/pool 2.debian.pool.ntp.org offline iburst/ \
 server \$HOST_CTL iburst/g' $path_chrony
 
 	elif [ "$1" == "compute2" ]; then
-		sed -i 's/pool 2.debian.pool.ntp.org offline iburst/\
+		sed -i 's/pool 2.debian.pool.ntp.org offline iburst/ \
 server \$HOST_CTL iburst/g' $path_chrony
 
 	else
-		echo "Error installing NTP"
+		echocolor "Error installing NTP"
 		exit 1
 	fi
 
@@ -140,7 +140,7 @@ fi
 if [ "$1" == "controller" ]; then 
 	install_crudini
 	install_python_client
-	install_ntp
+	install_ntp $1
 	install_database
 	install_rabbitmq
 	install_memcache
