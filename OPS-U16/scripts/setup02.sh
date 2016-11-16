@@ -10,18 +10,21 @@ source functions.sh
 ## Khai bao duong dan
 path_chrony=/etc/chrony/chrony.conf
 
+#############################################
 function install_crudini {
 	echocolor "Installing CRUDINI"
 	sleep 3
 	apt-get -y install crudini
 }
 
+#############################################
 function install_python_client {
 	echocolor "Install python client"
 	sleep 3
 	apt-get -y install python-openstackclient
 }
 
+#############################################
 function install_ntp {
 	echocolor "Install and config NTP"
 	sleep 3
@@ -55,26 +58,33 @@ function install_ntp {
 		
 }
 
+#############################################
 function install_database  {
 	echocolor "Install MYSQL"
 	sleep 3
 
-	echo mariadb-server-10.0 mysql-server/root_password $MYSQL_PASS | debconf-set-selections
-	echo mariadb-server-10.0 mysql-server/root_password_again $MYSQL_PASS | debconf-set-selections
-	apt-get install -y  mariadb-server
+	echo mariadb-server-10.0 mysql-server/root_password $MYSQL_PASS | \
+        debconf-set-selections
+	echo mariadb-server-10.0 mysql-server/root_password_again $MYSQL_PASS | \
+        debconf-set-selections
 
-	sed -r -i 's/127\.0\.0\.1/0\.0\.0\.0/' /etc/mysql/mariadb.conf.d/50-server.cnf
-	sed -i 's/character-set-server  = utf8mb4/character-set-server  = utf8/' /etc/mysql/mariadb.conf.d/50-server.cnf
-	sed -i 's/collation-server/#collation-server/' /etc/mysql/mariadb.conf.d/50-server.cnf
+    apt-get install -y  mariadb-server
+
+	sed -r -i 's/127\.0\.0\.1/0\.0\.0\.0/' \
+        /etc/mysql/mariadb.conf.d/50-server.cnf
+	sed -i 's/character-set-server  = utf8mb4/character-set-server  = utf8/' \
+        /etc/mysql/mariadb.conf.d/50-server.cnf
+	sed -i 's/collation-server/#collation-server/'  \
+        /etc/mysql/mariadb.conf.d/50-server.cnf
 
 	systemctl restart mysql
 
-	cat << EOF | mysql -uroot -p$MYSQL_PASS
+	mysql -uroot -p$MYSQL_PASS
 	GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$MYSQL_PASS' WITH GRANT OPTION;
 	GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY '$MYSQL_PASS' WITH GRANT OPTION;
 	FLUSH PRIVILEGES;
-	EOF
-
+	exit;
+	
 	ops_edit /etc/mysql/conf.d/openstack.cnf  client default-character-set utf8
 	ops_edit /etc/mysql/conf.d/openstack.cnf  mysqld bind-address 0.0.0.0
 	ops_edit /etc/mysql/conf.d/openstack.cnf  mysqld default-storage-engine innodb
@@ -89,9 +99,7 @@ function install_database  {
 
 }
 
-
 #############################################
-
 function install_rabbitmq {
 	echocolor "Install and Config RabbitMQ"
 	sleep 3
