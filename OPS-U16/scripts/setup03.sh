@@ -4,8 +4,8 @@
 ###############################################################################
 ## Khai bao cac chuong trinh ho tro
 dir_path=$(pwd $0)
-source $dir_path/config.cfg
-source $dir_path/functions.sh
+source $dir_path/../config.cfg
+source $dir_path/../functions.sh
 
 ### Running function
 ### Checking and help syntax command
