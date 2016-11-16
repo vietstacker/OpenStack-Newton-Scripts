@@ -1,39 +1,21 @@
 #!/bin/bash
-# source config.cfg
-# source functions.sh
-###############################################################################
-# Ham dinh nghia mau cho cac ban tin in ra man hinh
-function echocolor {
-    echo "$(tput setaf 3)##### $1 #####$(tput sgr0)"
-}
-
-
-# Ham sua file cau hinh cua OpenStack
-function ops_edit {
-    crudini --set $1 $2 $3 $4
-}
-
-# Cach dung
-## Cu phap:
-##          ops_edit_file $bien_duong_dan_file [SECTION] [PARAMETER] [VALUAE]
-## Vi du:
-###         filekeystone=/etc/keystone/keystone.conf
-###         ops_edit_file $filekeystone DEFAULT rpc_backend rabbit
-
-
-# Ham de del mot dong trong file cau hinh
-function ops_del {
-    crudini --del $1 $2 $3
-}
 
 
 ###############################################################################
+## Khai bao cac chuong trinh ho tro
+source config.cfg
+source functions.sh
+
+
+###############################################################################
+## Khai bao duong dan
 path_hostname=/etc/hostname
 path_interfaces=/etc/network/interfaces
 path_hosts=/etc/hosts
 
 ###############################################################################
 ## Dinh nghia cac ham
+
 function setup_ip_add {
     echocolor "Setup interfaces"
     sleep 3
@@ -143,8 +125,6 @@ function setup_hosts {
         echocolor "setup hostname sai roi"
 
     fi
-
-
     
 }
 
