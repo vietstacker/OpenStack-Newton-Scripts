@@ -55,7 +55,7 @@ function install_ntp {
 		
 }
 
-function install_database {
+function install_database  {
 	echocolor "Install MYSQL"
 	sleep 3
 
@@ -75,28 +75,20 @@ function install_database {
 	FLUSH PRIVILEGES;
 	EOF
 
-	echocolor "Configuring MYSQL"
-	sleep 3
-
-	echo "[client]
-	default-character-set = utf8
-
-	[mysqld]
-	bind-address = 0.0.0.0
-	default-storage-engine = innodb
-	innodb_file_per_table
-	max_connections = 4096
-	collation-server = utf8_general_ci
-	character-set-server = utf8
-	init-connect = 'SET NAMES utf8'
-
-	[mysql]
-	default-character-set = utf8" 	/etc/mysql/conf.d/openstack.cnf
+	ops_edit /etc/mysql/conf.d/openstack.cnf  client default-character-set utf8
+	ops_edit /etc/mysql/conf.d/openstack.cnf  mysqld bind-address 0.0.0.0
+	ops_edit /etc/mysql/conf.d/openstack.cnf  mysqld default-storage-engine innodb
+	ops_edit /etc/mysql/conf.d/openstack.cnf  mysqld innodb_file_per_table
+	ops_edit /etc/mysql/conf.d/openstack.cnf  mysqld max_connections 4096
+	ops_edit /etc/mysql/conf.d/openstack.cnf  mysqld collation-server utf8_general_ci
+	ops_edit /etc/mysql/conf.d/openstack.cnf  mysqld character-set-server utf8
 
 	echocolor "Restarting MYSQL"
 	sleep 5
 	systemctl restart mysql
+
 }
+
 
 #############################################
 
@@ -125,7 +117,6 @@ function install_memcache {
 	echocolor "Done, you can run next script"
 }
 
-
 ### Thuc thi ham
 
 ### Kie tra ham va cu phap thuc thi 
@@ -139,7 +130,7 @@ fi
 
 install_crudini
 install_python_client
-install_ntp
-install_database $1
+install_ntp $1
+install_database
 install_rabbitmq
 install_memcache
