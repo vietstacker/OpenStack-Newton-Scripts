@@ -60,7 +60,7 @@ function install_ntp ()
 
 function install_database () 
 {
-	echocolor "Install MYSQL"
+	echocolor "Install mariadb"
 	sleep 3
 
 	echo mariadb-server-10.0 mysql-server/root_password $MYSQL_PASS | debconf-set-selections
@@ -68,7 +68,8 @@ function install_database ()
 	apt-get install -y  mariadb-server
 
 	sed -r -i 's/127\.0\.0\.1/0\.0\.0\.0/' /etc/mysql/mariadb.conf.d/50-server.cnf
-	sed -i 's/character-set-server  = utf8mb4/character-set-server  = utf8/' /etc/mysql/mariadb.conf.d/50-server.cnf
+	sed -i 's/character-set-server  = utf8mb4/character-set-server  = utf8/' \
+		/etc/mysql/mariadb.conf.d/50-server.cnf
 	sed -i 's/collation-server/#collation-server/' /etc/mysql/mariadb.conf.d/50-server.cnf
 
 	systemctl restart mysql
