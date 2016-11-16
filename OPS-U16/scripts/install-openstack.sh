@@ -73,15 +73,12 @@ function install_database {
 	GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$MYSQL_PASS' WITH GRANT OPTION;
 	GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY '$MYSQL_PASS' WITH GRANT OPTION;
 	FLUSH PRIVILEGES;
-
 	EOF
 
 	echocolor "Configuring MYSQL"
 	sleep 3
 
-	cat << EOF > /etc/mysql/conf.d/openstack.cnf
-
-	[client]
+	echo "[client]
 	default-character-set = utf8
 
 	[mysqld]
@@ -94,8 +91,7 @@ function install_database {
 	init-connect = 'SET NAMES utf8'
 
 	[mysql]
-	default-character-set = utf8
-	EOF
+	default-character-set = utf8" 	/etc/mysql/conf.d/openstack.cnf
 
 	echocolor "Restarting MYSQL"
 	sleep 5
