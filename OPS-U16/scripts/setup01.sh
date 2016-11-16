@@ -140,15 +140,14 @@ function repo_openstack {
 }
 
 ###############################################################################
-## Thuc thi ham
-
-### Kie tra ham va cu phap thuc thi 
+### Running function
+### Checking and help syntax command
 if [ $# -ne 1 ]
     then
-        echocolor  "Thu thi voi cac tuy chon sau"
-        echo "Thuc hien tren Controller bash $0 controller"
-        echo "Thuc hien tren Compute1 bash $0 compute1"
-        echo "Thuc hien tren Compute1 bash $0 compute2"
+        echocolor  "Syntax command "
+        echo "Syntax command on Controller: bash $0 controller"
+        echo "Syntax command on Compute1: bash $0 compute1"
+        echo "Syntax command on Compute2: bash $0 compute2"
         exit 1;
 fi
 

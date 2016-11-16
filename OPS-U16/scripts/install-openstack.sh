@@ -75,10 +75,10 @@ function install_database ()
 	systemctl restart mysql
 
 	cat << EOF | mysql -uroot -p$MYSQL_PASS 
-	GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$MYSQL_PASS' WITH GRANT OPTION;
-	GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY '$MYSQL_PASS' WITH GRANT OPTION;
-	FLUSH PRIVILEGES;
-	EOF
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$MYSQL_PASS' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY '$MYSQL_PASS' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+EOF
  	
 	ops_edit /etc/mysql/conf.d/openstack.cnf  client default-character-set utf8
 	ops_edit /etc/mysql/conf.d/openstack.cnf  mysqld bind-address 0.0.0.0
