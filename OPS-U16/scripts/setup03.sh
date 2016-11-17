@@ -18,8 +18,11 @@ if [ $# -ne 1 ]
 fi
 
 if [ "$1" == "controller" ]; then
-	# bash $dir_path/install/install_keystone.sh
-	bash $dir_path/install/install_glance.sh
+		bash $dir_path/install/install_keystone.sh
+        bash $dir_path/install/install_glance.sh
+        bash $dir_path/install/install_nova.sh $1
+        bash $dir_path/install/install_neutron.sh
+
 else
 	echocolor "Xin chao"
 	exit 1;
