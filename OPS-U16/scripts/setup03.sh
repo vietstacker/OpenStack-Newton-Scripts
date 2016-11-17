@@ -18,7 +18,8 @@ if [ $# -ne 1 ]
 fi
 
 if [ "$1" == "controller" ]; then
-	bash $dir_path/install/install_keystone.sh
+	# bash $dir_path/install/install_keystone.sh
+	bash $dir_path/install/install_glance.sh
 else
 	echocolor "Xin chao"
 	exit 1;

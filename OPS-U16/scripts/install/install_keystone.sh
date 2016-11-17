@@ -20,7 +20,7 @@ echocolor "Install keystone"
 
 # echo "manual" > /etc/init/keystone.override
 
-apt-get -y install keystone
+apt-get -y install keystone --allow-unauthenticated
 
 # Back-up file keystone.conf
 path_keystone=/etc/keystone/keystone.conf
