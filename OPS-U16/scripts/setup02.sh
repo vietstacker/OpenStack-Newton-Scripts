@@ -42,11 +42,11 @@ server 3.asia.pool.ntp.org iburst/g' $path_chrony
 
 	elif [ "$1" == "compute1" ]; then
 		sed -i 's/pool 2.debian.pool.ntp.org offline iburst/ \
-server \$HOST_CTL iburst/g' $path_chrony
+server $HOST_CTL iburst/g' $path_chrony
 
 	elif [ "$1" == "compute2" ]; then
 		sed -i 's/pool 2.debian.pool.ntp.org offline iburst/ \
-server \$HOST_CTL iburst/g' $path_chrony
+server $HOST_CTL iburst/g' $path_chrony
 
 	else
 		echocolor "Error installing NTP"
