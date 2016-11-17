@@ -1,9 +1,4 @@
-sudo: required
-language: bash
-
-before_install:
-    - sudo apt-get -qq update
-    - sudo pip install bashate
-
-script:
-- /bin/bash tools/bashate.sh
+language: python
+python:
+  - "2.7"
+script: tox -e bashate
