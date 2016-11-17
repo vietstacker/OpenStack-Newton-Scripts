@@ -15,4 +15,4 @@ bash -c "grep -Irl \
         --exclude 'bashate.sh' \
         --exclude '*.md' \
         --exclude '*.txt' \
-        ../ | xargs bashate --verbose"
+        ../"
