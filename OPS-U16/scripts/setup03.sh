@@ -28,7 +28,7 @@ elif [ "$1" == "compute1" ] || [ "$1" == "compute2" ]; then
 	bash $dir_path/install/install_neutron.sh $1
 
 else
-	echocolor "Xin chao"
+	echocolor "Khong phai node can cai"
 	exit 1;
 
 fi

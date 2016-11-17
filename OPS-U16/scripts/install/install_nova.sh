@@ -8,6 +8,7 @@ source $dir_path/../config.cfg
 source $dir_path/../functions.sh
 
 ##  Init config path
+nova_ctl=/etc/nova/nova.conf
 
 if [ "$1" == "controller" ]; then
 		
@@ -44,7 +45,7 @@ else
 fi
 
 echocolor "Install NOVA in $CTL_MGNT_IP"
-sleep 3
+sleep 5
 
 if [ "$1" == "controller" ]; then
 
@@ -59,13 +60,10 @@ else
 fi
 
 ######## Backup configurations for NOVA ##########"
-sleep 7
-
-nova_ctl=/etc/nova/nova.conf
 test -f $nova_ctl.orig || cp $nova_ctl $nova_ctl.orig
 
 echocolor "Config file nova.conf"
-sleep 5
+sleep 3
 
 ## [DEFAULT] section
 ops_del $nova_ctl DEFAULT logdir
@@ -170,7 +168,7 @@ if [ "$1" == "controller" ]; then
 	su -s /bin/sh -c "nova-manage db sync" nova
 
 
-	echocolor "Restarting NOVA "
+	echocolor "Restarting NOVA on $CTL_MGNT_IP "
 	sleep 7
 	service nova-api restart
 	service nova-cert restart
@@ -192,6 +190,7 @@ if [ "$1" == "controller" ]; then
 	openstack compute service list
 
 elif [ "$1" == "compute1" ] || [ "$1" == "compute2" ] ; then
+	echocolor "Restarting NOVA on $COM2_MGNT_IP"
 	service nova-compute restart
 
 else
