@@ -1,0 +1,9 @@
+sudo: required
+language: bash
+
+before_install:
+    - sudo apt-get -qq update
+    - sudo pip install bashate
+
+script:
+- /tools/bashate.sh
