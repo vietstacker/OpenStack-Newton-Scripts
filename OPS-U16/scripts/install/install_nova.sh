@@ -89,17 +89,25 @@ elif [ "$1" == "compute1" ]; then
 elif [ "$1" == "compute2" ]; then
 	ops_edit $nova_ctl DEFAULT my_ip $COM2_MGNT_IP
 else
-	echocolor "Khong phai node cai nova"
+	echocolor "Khong phai node Controller"
 fi
 
-## [api_database] section
-ops_edit $nova_ctl api_database \
-    connection mysql+pymysql://nova:$NOVA_API_DBPASS@$CTL_MGNT_IP/nova_api
 
-    
-## [database] section
-ops_edit $nova_ctl database \
-    connection mysql+pymysql://nova:$NOVA_DBPASS@$CTL_MGNT_IP/nova
+if [ "$1" == "controller" ]; then
+	## [api_database] section
+	ops_edit $nova_ctl api_database \
+	    connection mysql+pymysql://nova:$NOVA_API_DBPASS@$CTL_MGNT_IP/nova_api
+	    
+	## [database] section
+	ops_edit $nova_ctl database \
+	    connection mysql+pymysql://nova:$NOVA_DBPASS@$CTL_MGNT_IP/nova
+
+	## [cinder] Section
+	ops_edit $nova_ctl cinder os_region_name RegionOne
+
+else
+	echocolor "Khong phai node Controller"
+fi
 
 ## [oslo_messaging_rabbit] section
 # ops_edit $nova_ctl oslo_messaging_rabbit rabbit_host $CTL_MGNT_IP
@@ -152,9 +160,6 @@ ops_edit $nova_ctl neutron service_metadata_proxy True
 ops_edit $nova_ctl neutron metadata_proxy_shared_secret $METADATA_SECRET
 
 if [ "$1" == "controller" ]; then 
-	
-	## [cinder] Section
-	ops_edit $nova_ctl cinder os_region_name RegionOne
 	echocolor "Remove Nova default db "
 	sleep 5
 	rm /var/lib/nova/nova.sqlite
@@ -191,3 +196,4 @@ elif [ "$1" == "compute1" ] || [ "$1" == "compute2" ] ; then
 
 else
 	echocolor "Khong phai NOVA - CTL"
+fi
