@@ -6,4 +6,4 @@ before_install:
     - sudo pip install bashate
 
 script:
-- /tools/bashate.sh
+- /bin/bash tools/bashate.sh
