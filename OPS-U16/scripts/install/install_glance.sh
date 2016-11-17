@@ -1,13 +1,13 @@
 #!/bin/bash
-## Install Keystone
+## Install GLANCE
 
 ###############################################################################
-## Khai bao cac chuong trinh ho tro
+## Init enviroiment source
 dir_path=$(dirname $0)
 source $dir_path/../config.cfg
 source $dir_path/../functions.sh
 
-## PATH
+##  Init config path
 glancereg_ctl=/etc/glance/glance-registry.conf
 glanceapi_ctl=/etc/glance/glance-api.conf
 

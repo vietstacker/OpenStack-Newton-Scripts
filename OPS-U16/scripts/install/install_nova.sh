@@ -1,12 +1,13 @@
 #!/bin/bash
-## Install Keystone
+## Install NOVA
 
 ###############################################################################
-## Khai bao cac chuong trinh ho tro
+## Init enviroiment source
 dir_path=$(dirname $0)
 source $dir_path/../config.cfg
 source $dir_path/../functions.sh
 
+##  Init config path
 
 echocolor "Create DB for NOVA "
 cat << EOF | mysql -uroot -p$MYSQL_PASS
