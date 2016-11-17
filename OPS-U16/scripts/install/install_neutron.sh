@@ -6,7 +6,7 @@
 ## Init enviroiment source
 dir_path=$(dirname $0)
 source $dir_path/../config.cfg
-source $dir_path/../functions.sh
+source $dir_path/../lib/functions.sh
 
 ##  Init config path
 neutron_ctl=/etc/neutron/neutron.conf
@@ -19,8 +19,6 @@ netl3agent=/etc/neutron/l3_agent.ini
 
 if [ "$1" == "controller" ]; then
 
-
-
 	# echocolor "Configuring net forward for all VMs"
 	# sleep 5
 	# echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
@@ -31,11 +29,11 @@ if [ "$1" == "controller" ]; then
 	echocolor "Create DB for NEUTRON "
 	sleep 5
 	cat << EOF | mysql -uroot -p$MYSQL_PASS
-	CREATE DATABASE neutron;
-	GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'localhost' IDENTIFIED BY '$NEUTRON_DBPASS';
-	GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY '$NEUTRON_DBPASS';
-	FLUSH PRIVILEGES;
-	EOF
+CREATE DATABASE neutron;
+GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'localhost' IDENTIFIED BY '$NEUTRON_DBPASS';
+GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY '$NEUTRON_DBPASS';
+FLUSH PRIVILEGES;
+EOF
 
 	echocolor "Create  user, endpoint for NEUTRON"
 	sleep 5
@@ -271,6 +269,7 @@ elif [ "$1" == "compute1" ] || [ "$1" == "compute2" ]; then
 
 else
 	echocolor "Khong phai node controller"
+fi
 
 echocolor "Da cau hinh xong"
 
