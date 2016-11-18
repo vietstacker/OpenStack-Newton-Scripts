@@ -1,20 +1,38 @@
-﻿## OpenStack Newton note
+﻿# OpenStack Newton note
 
-# Mô hình
+## Mô hình
 
-# Các bước cài đặt
+![Mô hình cài đặt](../images/topo-openstack-newton.png)
+
+
+## Môi trường cài đặt
+
+- Hệ điều hành: Ubuntu Server 16.04 64 bit
+- CPU hỗ trợ công nghệ VT
+
+## Các chú ý khi cài đặt
+
+- Thực thi với quyền `root`
+
+
+
+## Các bước cài đặt
 ## Controller node
 - Thực hiện các lệnh sau để tải script
-```sh
-apt-get -y update && apt-get -y install git 
 
-git clone https://github.com/congto/OpenStack-Newton-Scripts.git
-mv /root/OpenStack-Newton-Scripts/OPS-U16/scripts/ /root/
-rm -rf  /root/OpenStack-Newton-Scripts/
-cd scripts
-chmod +x *.sh
+	```sh
+	apt-get -y update && apt-get -y install git 
 
-```
+	git clone https://github.com/congto/OpenStack-Newton-Scripts.git
+
+	mv /root/OpenStack-Newton-Scripts/OPS-U16/scripts/ /root/
+
+	rm -rf  /root/OpenStack-Newton-Scripts/
+
+	cd scripts
+
+	chmod -R +x *.sh
+	```
 
 - Sửa biến trong file `config.cfg` theo ý muốn. Chỉ cần sửa các biến về địa chỉ IP, Gateway, DNS  sao cho phù hợp với thứ tự card mạng và dải IP thực tế..... Các biến password nên để nguyên.
 
