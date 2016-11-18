@@ -1,10 +1,10 @@
 #!/bin/bas
 
 ###############################################################################
-## Khai bao cac chuong trinh ho tro
+## Init enviroiment source
 dir_path=$(dirname $0)
 source $dir_path/config.cfg
-source $dir_path/functions.sh
+source $dir_path/lib/functions.sh
 
 ### Running function
 ### Checking and help syntax command
@@ -28,7 +28,7 @@ elif [ "$1" == "compute1" ] || [ "$1" == "compute2" ]; then
 
 else
 	echocolor "Error syntax"
-    echocolor  "Syntax command"
+    echocolor "Syntax command"
     echo "Syntax command on Controller: bash $0 controller"
     echo "Syntax command on Compute1: bash $0 compute1"
     echo "Syntax command on Compute2: bash $0 compute2"

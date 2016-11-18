@@ -2,9 +2,10 @@
 
 
 ###############################################################################
-## Khai bao cac chuong trinh ho tro
-source config.cfg
-source functions.sh
+## Init enviroiment source
+dir_path=$(dirname $0)
+source $dir_path/config.cfg
+source $dir_path/lib/functions.sh
 
 
 ###############################################################################
