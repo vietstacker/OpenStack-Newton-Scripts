@@ -3,8 +3,9 @@
 
 ###############################################################################
 ## Khai bao cac chuong trinh ho tro
-source config.cfg
-source functions.sh
+dir_path=$(dirname $0)
+source $dir_path/config.cfg
+source $dir_path/functions.sh
 
 ###############################################################################
 ## Khai bao duong dan
@@ -35,18 +36,18 @@ function install_ntp {
 	test -f $path_chrony.orig || cp $path_chrony $path_chrony.orig
 
 	if [ "$1" == "controller" ]; then
-		sed -i 's/pool 2.debian.pool.ntp.org offline iburst/ \
+		sed -i 's/pool 2.debian.pool.ntp.org offline iburst/\
 server 1.vn.pool.ntp.org iburst \
 server 0.asia.pool.ntp.org iburst \
 server 3.asia.pool.ntp.org iburst/g' $path_chrony
 
 	elif [ "$1" == "compute1" ]; then
-		sed -i 's/pool 2.debian.pool.ntp.org offline iburst/ \
-server $HOST_CTL iburst/g' $path_chrony
+		sed -i "s/pool 2.debian.pool.ntp.org offline iburst/\
+server $HOST_CTL iburst/g" $path_chrony
 
 	elif [ "$1" == "compute2" ]; then
-		sed -i 's/pool 2.debian.pool.ntp.org offline iburst/ \
-server $HOST_CTL iburst/g' $path_chrony
+		sed -i "s/pool 2.debian.pool.ntp.org offline iburst/\
+server $HOST_CTL iburst/g" $path_chrony
 
 	else
 		echocolor "Error installing NTP"

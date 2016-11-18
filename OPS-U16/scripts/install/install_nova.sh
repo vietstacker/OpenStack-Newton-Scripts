@@ -44,15 +44,17 @@ else
 	echocolor "Khong phai node Controller, khong can tao endpoint"
 fi
 
-echocolor "Install NOVA in $CTL_MGNT_IP"
-sleep 5
+
 
 if [ "$1" == "controller" ]; then
-
+	echocolor "Install NOVA in $CTL_MGNT_IP"
+	sleep 3
 	apt-get -y install nova-api nova-cert nova-conductor nova-consoleauth \
 	    	nova-novncproxy nova-scheduler
 
 elif [ "$1" == "compute1" ] || [ "$1" == "compute2" ] ; then
+	echocolor "Install NOVA in $1"
+	sleep 3
 	 apt-get -y install nova-compute
 
 else 
@@ -168,8 +170,8 @@ if [ "$1" == "controller" ]; then
 	su -s /bin/sh -c "nova-manage db sync" nova
 
 
-	echocolor "Restarting NOVA on $CTL_MGNT_IP "
-	sleep 7
+	echocolor "Restarting NOVA on $1"
+	sleep 3
 	service nova-api restart
 	service nova-cert restart
 	service nova-consoleauth restart
@@ -178,7 +180,7 @@ if [ "$1" == "controller" ]; then
 	service nova-novncproxy restart
 
 	sleep 7
-	echocolor "Restarting NOVA"
+	echocolor "Restarting NOVA on $1"
 	service nova-api restart
 	service nova-cert restart
 	service nova-consoleauth restart
@@ -189,8 +191,9 @@ if [ "$1" == "controller" ]; then
 	echocolor "Testing NOVA service"
 	openstack compute service list
 
-elif [ "$1" == "compute1" ] || [ "$1" == "compute2" ] ; then
-	echocolor "Restarting NOVA on $COM2_MGNT_IP"
+elif [ "$1" == "compute1" ] || [ "$1" == "compute2" ]; then
+	echocolor "Restarting NOVA on $1"
+	sleep 3
 	service nova-compute restart
 
 else

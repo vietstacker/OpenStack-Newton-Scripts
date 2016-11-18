@@ -8,8 +8,7 @@ source $dir_path/functions.sh
 
 ### Running function
 ### Checking and help syntax command
-if [ $# -ne 1 ]
-    then
+if [ $# -ne 1 ]; then
         echocolor  "Syntax command "
         echo "Syntax command on Controller: bash $0 controller"
         echo "Syntax command on Compute1: bash $0 compute1"
@@ -28,7 +27,11 @@ elif [ "$1" == "compute1" ] || [ "$1" == "compute2" ]; then
 	bash $dir_path/install/install_neutron.sh $1
 
 else
-	echocolor "Khong phai node can cai"
+	echocolor "Error syntax"
+    echocolor  "Syntax command"
+    echo "Syntax command on Controller: bash $0 controller"
+    echo "Syntax command on Compute1: bash $0 compute1"
+    echo "Syntax command on Compute2: bash $0 compute2"
 	exit 1;
 
 fi

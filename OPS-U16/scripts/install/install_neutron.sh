@@ -26,7 +26,7 @@ if [ "$1" == "controller" ]; then
 	# echo "net.ipv4.conf.default.rp_filter=0" >> /etc/sysctl.conf
 	# sysctl -p
 
-	echocolor "Create DB for NEUTRON "
+	echocolor "Create DB for NEUTRON on $1 "
 	sleep 5
 	cat << EOF | mysql -uroot -p$MYSQL_PASS
 CREATE DATABASE neutron;
@@ -55,7 +55,7 @@ EOF
 
 	# SERVICE_TENANT_ID=`keystone tenant-get service | awk '$2~/^id/{print $4}'`
 
-	echocolor "Install NEUTRON node - Using Linux Bridge"
+	echocolor "Install NEUTRON node - Using Linux Bridge on $1"
 	sleep 5
 	apt-get -y install neutron-server neutron-plugin-ml2 \
 	neutron-linuxbridge-agent neutron-l3-agent neutron-dhcp-agent \
@@ -223,6 +223,8 @@ EOF
 	echocolor "Finished install NEUTRON on CONTROLLER"
 
 elif [ "$1" == "compute1" ] || [ "$1" == "compute2" ]; then
+	echocolor "Restarting NEUTRON on $1"
+	sleep 3
 	apt -y install neutron-linuxbridge-agent
 	test -f $neutron_com.orig || cp $neutron_com $neutron_com.orig
 
@@ -266,6 +268,7 @@ elif [ "$1" == "compute1" ] || [ "$1" == "compute2" ]; then
 
 	echocolor "Restarting NEUTRON service "
 	sleep 7
+	service neutron-linuxbridge-agent restart
 
 else
 	echocolor "Khong phai node controller"
