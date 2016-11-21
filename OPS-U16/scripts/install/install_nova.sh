@@ -134,7 +134,7 @@ elif [ "$1" == "compute1" ] || [ "$1" == "compute2" ] ; then
 	ops_edit $nova_ctl vnc enabled  true
 	ops_edit $nova_ctl vnc vncserver_listen 0.0.0.0
 	ops_edit $nova_ctl vnc vncserver_proxyclient_address \$my_ip
-	ops_edit $nova_ctl vnc novncproxy_base_url http://$CTL_MGNT_IP:6080/vnc_auto.htm
+	ops_edit $nova_ctl vnc novncproxy_base_url http://$CTL_MGNT_IP:6080/vnc_auto.html
 else
 	echo "Khong can cai VNC"
 fi
