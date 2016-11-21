@@ -147,8 +147,4 @@
 	bash  create-vm.sh
 	```
 
-<<<<<<< HEAD
 # Hết
-=======
-# Hết
->>>>>>> refs/remotes/vietstacker/master

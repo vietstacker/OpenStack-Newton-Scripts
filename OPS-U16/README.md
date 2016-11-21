@@ -1,24 +1,17 @@
 ﻿# OpenStack Newton note
 
-## Mô hình
+##  Topology
 
 ![Mô hình cài đặt](../images/topo-openstack-newton.png)
 
+![requirement_hardware.png](../images/requirement_hardware.png)
 
-## Môi trường cài đặt
-
-- Hệ điều hành: Ubuntu Server 16.04 64 bit
-- CPU hỗ trợ công nghệ VT
-
-## Các chú ý khi cài đặt
-
-- Thực thi với quyền `root`
+## requirement_hardware
 
 
 
-## Các bước cài đặt
-## Controller node
-- Thực hiện các lệnh sau để tải script
+##  ALL node
+- Download git & scripts 
 
 	```sh
 	apt-get -y update && apt-get -y install git 
@@ -34,37 +27,38 @@
 	chmod -R +x *.sh
 	```
 
-- Sửa biến trong file `config.cfg` theo ý muốn. Chỉ cần sửa các biến về địa chỉ IP, Gateway, DNS  sao cho phù hợp với thứ tự card mạng và dải IP thực tế..... Các biến password nên để nguyên.
+- Can you edit `config.cfg` file
 
+##  Controller 
 
-- Thực thi script dưới để cấu hình IP, khai báo repos của OpenStack cho controller node.
- ```sh
- bash ctl-1-ipadd.sh
- ```
- 
-- Sau khi thực hiện script trên xong, máy controller sẽ khởi động lại. Đăng nhập với quyền root và thực hiện script tiếp theo.
- ```sh
- su - 
- cd scripts/
- bash ctl-2-prepare.sh
- ```
- 
-- Thực thi script cài đặt `keystone`
+- SSH with `root` account and run scripts
 
-    ```sh
-    bash ctl-3.keystone.sh
-    ```
-    
-- Thực thi biến môi trường
+```sh
+bash setup01.sh controller
+bash setup02.sh controller
+bash setup03.sh controller
+```
 
-    ```sh
-    bash admin-openrc
-    ```
-    
-- Thực thi script cài đặt `glance`
+##  Compute1 
 
-    ```sh
-    bash ctl-4-glance.sh
-    ```
-    
-- 
+- SSH with `root` account and run scripts 
+
+```sh
+bash setup01.sh compute1
+bash setup02.sh compute1
+bash setup03.sh compute1
+```
+
+## Create network, VM
+
+- On Controller node, run 
+
+```sh
+bash create-vm.sh
+```
+
+## Login dashboad 
+
+IP: 172.16.69.30/horizon
+User : admin/Welcome123
+
