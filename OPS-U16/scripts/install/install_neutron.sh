@@ -272,6 +272,54 @@ elif [ "$1" == "compute1" ] || [ "$1" == "compute2" ]; then
 	sleep 7
 	service neutron-linuxbridge-agent restart
 
+elif [ "$1" == "compute2" ]; then
+	echocolor "Restarting NEUTRON on $1"
+	sleep 3
+	apt -y install neutron-linuxbridge-agent
+	test -f $neutron_com.orig || cp $neutron_com $neutron_com.orig
+
+	ops_edit $neutron_com DEFAULT transport_url  rabbit://openstack:$RABBIT_PASS@$CTL_MGNT_IP
+	ops_edit $neutron_com DEFAULT auth_strategy keystone	
+	ops_edit $neutron_com DEFAULT notify_nova_on_port_status_changes True
+	ops_edit $neutron_com DEFAULT notify_nova_on_port_data_changes True
+	ops_edit $neutron_com DEFAULT core_plugin ml2
+
+	## [database] section
+	ops_edit $neutron_ctl database \
+	connection mysql+pymysql://neutron:$NEUTRON_DBPASS@$CTL_MGNT_IP/neutron
+
+	## [keystone_authtoken] section
+	ops_edit $neutron_com  keystone_authtoken auth_uri http://$CTL_MGNT_IP:5000
+	ops_edit $neutron_com  keystone_authtoken auth_url http://$CTL_MGNT_IP:35357
+	ops_edit $neutron_com  keystone_authtoken memcached_servers $CTL_MGNT_IP:11211
+	ops_edit $neutron_com  keystone_authtoken auth_type password
+	ops_edit $neutron_com  keystone_authtoken project_domain_name default
+	ops_edit $neutron_com  keystone_authtoken user_domain_name default
+	ops_edit $neutron_com  keystone_authtoken project_name service
+	ops_edit $neutron_com  keystone_authtoken username neutron
+	ops_edit $neutron_com  keystone_authtoken password $NEUTRON_PASS
+
+	echocolor "Configuring linuxbridge_agent"
+	sleep 5
+	test -f $lbfile.orig || cp $lbfile $lbfile.orig
+
+	# [linux_bridge] section
+	ops_edit $lbfile linux_bridge physical_interface_mappings provider:$EXT_INTERFACE
+
+	# [vxlan] section
+	ops_edit $lbfile vxlan enable_vxlan True
+	ops_edit $lbfile vxlan local_ip $COM2_DATA_IP
+	ops_edit $lbfile vxlan l2_population True
+
+	# [securitygroup] section
+	ops_edit $lbfile securitygroup enable_security_group True
+	ops_edit $lbfile securitygroup firewall_driver \
+	    neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
+
+	echocolor "Restarting NEUTRON service "
+	sleep 7
+	service neutron-linuxbridge-agent restart	
+
 else
 	echocolor "Khong phai node controller"
 fi
