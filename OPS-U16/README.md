@@ -59,6 +59,11 @@ bash create-vm.sh
 
 ## Login dashboad 
 
-IP: 172.16.69.30/horizon
-User : admin/Welcome123
+- Dashboard: `172.16.69.30/horizon`
+- User : `admin/Welcome123`
+
+## Check
+### Check by command or dashboard
+![Lệnh](../images/img1.png)
+![web](../images/img2.png)
 

@@ -147,4 +147,12 @@
 	bash  create-vm.sh
 	```
 
+## Login dashboad 
+
+- Dashboard: `172.16.69.30/horizon`
+- User : `admin/Welcome123`
+
+### Có thể kiểm tra bằng các lệnh và trong màn hình dashboad
+![Lệnh](./images/img1.png)
+![web](./images/img2.png)
 # Hết
