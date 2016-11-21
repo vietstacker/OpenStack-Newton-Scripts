@@ -5,6 +5,7 @@
 dir_path=$(dirname $0)
 source $dir_path/config.cfg
 source $dir_path/lib/functions.sh
+source $dir_path/admin-openrc
 
 ### Running function
 ### Checking and help syntax command

@@ -38,7 +38,6 @@ iface $MGNT_INTERFACE inet static
     address $CTL_MGNT_IP
     netmask $NETMASK_ADD_MGNT
 
-
 # The primary network interface
 auto $EXT_INTERFACE
 iface $EXT_INTERFACE inet static
@@ -47,6 +46,11 @@ iface $EXT_INTERFACE inet static
     gateway $GATEWAY_IP_EXT
     dns-nameservers 8.8.8.8
 
+# DATA VM
+auto $DATA_INTERFACE
+iface $DATA_INTERFACE inet static
+    address $CTL_DATA_IP
+    netmask $NETMASK_ADD_DATA
 EOF
 
     elif [ "$1" == "compute1" ]; then
