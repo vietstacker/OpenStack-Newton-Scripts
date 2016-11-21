@@ -7,6 +7,8 @@ dir_path=$(dirname $0)
 source $dir_path/../config.cfg
 source $dir_path/../lib/functions.sh
 
+source admin-openrc
+
 ##  Init config path
 nova_ctl=/etc/nova/nova.conf
 
