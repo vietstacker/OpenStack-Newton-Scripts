@@ -4,11 +4,11 @@
 
 ### Topology 
 
-![Mô hình cài đặt](../images/topo-openstack-newton.png)
+![Mô hình cài đặt](./images/topo-openstack-newton.png)
 
 ### Requirement Hardware
 
-![requirement_hardware.png](../images/requirement_hardware.png)
+![requirement_hardware.png](./images/requirement_hardware.png)
 
 ### Requiement for OS
 
