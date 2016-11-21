@@ -1,8 +1,17 @@
-#!/bin/bash -ex
-#
-source config.cfg
-source functions.sh
+#!/bin/bash
+## Install GLANCE
 
+###############################################################################
+## Init enviroiment source
+dir_path=$(dirname $0)
+source $dir_path/../config.cfg
+source $dir_path/../lib/functions.sh
+
+##  Init config path
+glancereg_ctl=/etc/glance/glance-registry.conf
+glanceapi_ctl=/etc/glance/glance-api.conf
+
+###############################################################################
 echocolor "Create the database for GLANCE"
 sleep 3
 
@@ -37,7 +46,7 @@ apt-get -y install glance
 echocolor "Configuring GLANCE API"
 sleep 5
 #/* Back-up file nova.conf
-glanceapi_ctl=/etc/glance/glance-api.conf
+
 test -f $glanceapi_ctl.orig || cp $glanceapi_ctl $glanceapi_ctl.orig
 
 # Configuring glance config file /etc/glance/glance-api.conf
@@ -74,7 +83,6 @@ ops_edit $glanceapi_ctl glance_store \
 sleep 10
 echocolor "Configuring GLANCE REGISTER"
 #/* Backup file file glance-registry.conf
-glancereg_ctl=/etc/glance/glance-registry.conf
 test -f $glancereg_ctl.orig || cp $glancereg_ctl $glancereg_ctl.orig
 
 ## [DEFAULT] section

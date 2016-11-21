@@ -5,12 +5,31 @@
 # 2. Chuẩn bị
 ## 2.1. Mô hình
 
-## 2.2. Yêu cầu
-- Về cấu hình từng máy chủ
+![Mô hình cài đặt](../images/topo-openstack-newton.png)
 
-- Về IP
+## 2.2. Yêu cầu cấu hình tối thiểu
+- Node CONTROLLER
+
+  ```sh
+  CPU: 02 CPU, hỗ trợ công nghệ VT
+  RAM: 6GB
+  HDD: 40GB
+  NICs: 03 NIC
+  Hệ điều hành: Ubuntu Server 16.04 - 64 bit
+  ```
+
+- Các node COMPUTE1, COMPUTE2
+
+  ```sh
+  CPU: 04 CPU, hỗ trợ công nghệ VT
+  RAM: 4GB
+  HDD: 60GB
+  NICs: 03 NIC
+  Hệ điều hành: Ubuntu Server 16.04 - 64 bit
+  ```
 
 ## 2.3 Chú ý khi chuẩn bị
+
 
 # 3. Cài đặt trên CONTROLLER NODE
 
