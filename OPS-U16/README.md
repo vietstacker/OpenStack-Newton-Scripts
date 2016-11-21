@@ -1,14 +1,17 @@
 ﻿# OpenStack Newton note
 
-## Mô hình
+##  Topology
 
 ![Mô hình cài đặt](../images/topo-openstack-newton.png)
 
+![requirement_hardware.png](../images/requirement_hardware.png)
+
+## requirement_hardware
 
 
 
-##  Tất cả các node
-- Thực hiện các lệnh sau để tải script
+##  ALL node
+- Download git & scripts 
 
 	```sh
 	apt-get -y update && apt-get -y install git 
@@ -24,9 +27,11 @@
 	chmod -R +x *.sh
 	```
 
+- Can you edit `config.cfg` file
+
 ##  Controller 
 
-- Thực hiện với quyền root
+- SSH with `root` account and run scripts
 
 ```sh
 bash setup01.sh controller
@@ -36,7 +41,7 @@ bash setup03.sh controller
 
 ##  Compute1 
 
-- Thực hiện với quyền root
+- SSH with `root` account and run scripts 
 
 ```sh
 bash setup01.sh compute1
@@ -44,11 +49,16 @@ bash setup02.sh compute1
 bash setup03.sh compute1
 ```
 
-## Tạo network, VM
+## Create network, VM
 
-- Thực hiện trên controller node
+- On Controller node, run 
 
 ```sh
 bash create-vm.sh
 ```
+
+## Login dashboad 
+
+IP: 172.16.69.30/horizon
+User : admin/Welcome123
 
