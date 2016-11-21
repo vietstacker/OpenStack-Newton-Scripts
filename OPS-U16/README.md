@@ -5,19 +5,9 @@
 ![Mô hình cài đặt](../images/topo-openstack-newton.png)
 
 
-## Môi trường cài đặt
-
-- Hệ điều hành: Ubuntu Server 16.04 64 bit
-- CPU hỗ trợ công nghệ VT
-
-## Các chú ý khi cài đặt
-
-- Thực thi với quyền `root`
 
 
-
-## Các bước cài đặt
-## Controller node
+##  Tất cả các node
 - Thực hiện các lệnh sau để tải script
 
 	```sh
@@ -34,37 +24,31 @@
 	chmod -R +x *.sh
 	```
 
-- Sửa biến trong file `config.cfg` theo ý muốn. Chỉ cần sửa các biến về địa chỉ IP, Gateway, DNS  sao cho phù hợp với thứ tự card mạng và dải IP thực tế..... Các biến password nên để nguyên.
+##  Controller 
 
+- Thực hiện với quyền root
 
-- Thực thi script dưới để cấu hình IP, khai báo repos của OpenStack cho controller node.
- ```sh
- bash ctl-1-ipadd.sh
- ```
- 
-- Sau khi thực hiện script trên xong, máy controller sẽ khởi động lại. Đăng nhập với quyền root và thực hiện script tiếp theo.
- ```sh
- su - 
- cd scripts/
- bash ctl-2-prepare.sh
- ```
- 
-- Thực thi script cài đặt `keystone`
+```sh
+bash setup01.sh controller
+bash setup02.sh controller
+bash setup03.sh controller
+```
 
-    ```sh
-    bash ctl-3.keystone.sh
-    ```
-    
-- Thực thi biến môi trường
+##  Compute1 
 
-    ```sh
-    bash admin-openrc
-    ```
-    
-- Thực thi script cài đặt `glance`
+- Thực hiện với quyền root
 
-    ```sh
-    bash ctl-4-glance.sh
-    ```
-    
-- 
+```sh
+bash setup01.sh compute1
+bash setup02.sh compute1
+bash setup03.sh compute1
+```
+
+## Tạo network, VM
+
+- Thực hiện trên controller node
+
+```sh
+bash create-vm.sh
+```
+
