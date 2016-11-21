@@ -22,6 +22,7 @@ if [ "$1" == "controller" ]; then
         bash $dir_path/install/install_glance.sh
         bash $dir_path/install/install_nova.sh $1
         bash $dir_path/install/install_neutron.sh $1
+        bash $dir_path/install/install_horizon.sh
 
 elif [ "$1" == "compute1" ] || [ "$1" == "compute2" ]; then
 	bash $dir_path/install/install_nova.sh $1
