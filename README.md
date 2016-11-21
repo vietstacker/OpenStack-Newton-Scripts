@@ -2,6 +2,8 @@
 
 ## Các bước sử dụng script cài đặt OpenStack Newton 
 
+- Script từ phiên bản OpenStack Newton được team rút gọn các bước thực hiện.
+
 ### Mô hình cài đặt
 - Tối thiểu cần 01 node Controller và 01 node Compute, các node khác có thể bổ sung theo tài nguyên có sẵn.
 
