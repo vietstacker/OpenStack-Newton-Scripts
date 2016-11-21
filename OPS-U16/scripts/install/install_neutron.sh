@@ -8,6 +8,8 @@ dir_path=$(dirname $0)
 source $dir_path/../config.cfg
 source $dir_path/../lib/functions.sh
 
+source admin-openrc
+
 ##  Init config path
 neutron_ctl=/etc/neutron/neutron.conf
 neutron_com=/etc/neutron/neutron.conf
