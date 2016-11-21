@@ -57,9 +57,13 @@ OPENSTACK_API_VERSIONS = {
 }
 EOF
 
+
+sed -i "s/DEFAULT_THEME = 'ubuntu'/DEFAULT_THEME = 'default'/g" \
+	/etc/openstack-dashboard/local_settings.py
+
 sed -i "s/#OPENSTACK_KEYSTONE_DEFAULT_DOMAIN = 'default'/\
 OPENSTACK_KEYSTONE_DEFAULT_DOMAIN = 'default'/g" \
-/etc/openstack-dashboard/local_settings.py
+	/etc/openstack-dashboard/local_settings.py
 
 ## /* Restarting apache2 and memcached
 service apache2 restart
