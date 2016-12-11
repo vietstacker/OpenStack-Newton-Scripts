@@ -224,7 +224,7 @@ EOF
 	neutron agent-list
 	echocolor "Finished install NEUTRON on CONTROLLER"
 
-elif [ "$1" == "compute1" ] || [ "$1" == "compute2" ]; then
+elif [ "$1" == "compute1" ]; then
 	echocolor "Restarting NEUTRON on $1"
 	sleep 3
 	apt -y install neutron-linuxbridge-agent

@@ -31,10 +31,34 @@
 ###  Cài đặt trên Controller Node
 
 - Đăng nhập vào OS và sử dụng quyền `root`
-- Update các gói phần mềm, tải git và scripts 
+- Update các gói phần mềm
+	```sh
+	apt-get -y update 
+	```
+- Chú ý: nếu chạy lệnh trên mà xuất hiện kết quả như dưới thì cần xử lý thông báo này trước, nếu không bị thì bỏ qua sang bước cài git ở dưới.
 
 	```sh
-	apt-get -y update && apt-get -y install git 
+	root@u16-ctl1:~# apt-get -y update
+	Hit:1 http://us.archive.ubuntu.com/ubuntu xenial InRelease
+	Get:2 http://security.ubuntu.com/ubuntu xenial-security InRelease [102 kB]
+	Get:3 http://us.archive.ubuntu.com/ubuntu xenial-updates InRelease [102 kB]
+	Get:4 http://us.archive.ubuntu.com/ubuntu xenial-backports InRelease [102 kB]
+	Fetched 306 kB in 2s (137 kB/s)
+	E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)
+	E: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?
+	````
+
+- Xóa các file và thư mục trong `/var/lib/dpkg/lock`
+
+	```sh
+	root@u16-ctl1:~# rm -rf /var/lib/dpkg/lock
+	root@u16-ctl1:~# apt update
+	```
+
+- Tiếp tục thực hiện cài git và tải các script
+
+	```sh
+	apt-get -y install git 
 
 	git clone https://github.com/congto/OpenStack-Newton-Scripts.git
 
@@ -89,10 +113,35 @@
 - Trong hướng dẫn này chỉ thực hiện trên máy chủ `compute1`
 - Cần gõ đúng tên của các máy chủ `compute1`, `compute2` ...
 - Đăng nhập vào OS và sử dụng quyền `root`
-- Update các gói phần mềm, tải git và scripts 
+- Đăng nhập vào OS và sử dụng quyền `root`
+- Update các gói phần mềm
+	```sh
+	apt-get -y update 
+	```
+- Chú ý: nếu chạy lệnh trên mà xuất hiện kết quả như dưới thì cần xử lý thông báo này trước, nếu không bị thì bỏ qua sang bước cài git ở dưới.
 
 	```sh
-	apt-get -y update && apt-get -y install git 
+	root@u16-ctl1:~# apt-get -y update
+	Hit:1 http://us.archive.ubuntu.com/ubuntu xenial InRelease
+	Get:2 http://security.ubuntu.com/ubuntu xenial-security InRelease [102 kB]
+	Get:3 http://us.archive.ubuntu.com/ubuntu xenial-updates InRelease [102 kB]
+	Get:4 http://us.archive.ubuntu.com/ubuntu xenial-backports InRelease [102 kB]
+	Fetched 306 kB in 2s (137 kB/s)
+	E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)
+	E: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?
+	````
+
+- Xóa các file và thư mục trong `/var/lib/dpkg/lock`
+
+	```sh
+	root@u16-ctl1:~# rm -rf /var/lib/dpkg/lock
+	root@u16-ctl1:~# apt update
+	```
+
+- Tiếp tục thực hiện cài git và tải các script
+
+	```sh
+	apt-get -y install git 
 
 	git clone https://github.com/congto/OpenStack-Newton-Scripts.git
 
@@ -147,4 +196,12 @@
 	bash  create-vm.sh
 	```
 
+## Login dashboad 
+
+- Dashboard: `172.16.69.30/horizon`
+- User : `admin/Welcome123`
+
+### Có thể kiểm tra bằng các lệnh và trong màn hình dashboad
+![Lệnh](./images/img1.png)
+![web](./images/img2.png)
 # Hết
